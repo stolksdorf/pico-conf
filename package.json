@@ -2,10 +2,14 @@
   "name": "pico-conf",
   "version": "0.0.0",
   "description": "A tiny config manager for node and browser",
-  "main": "index.js",
+  "main": "pico-config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "pico-check test.js test_arg=5 TEST:ARG=true",
+    "dev": "pico-check -w -v test.js"
   },
   "author": "stolksdorf",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "pico-check": "^1.0.3"
+  }
 }
