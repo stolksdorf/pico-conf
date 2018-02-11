@@ -16,7 +16,7 @@ config.get('auth:token');
 
 *Features*
 - No dependacies
-- 80 lines
+- Under 80 lines
 - Agnostic to storage method; Just takes JS objects
 - Can be transpiled to work on the browser
 - Has overrides and default layers
@@ -26,7 +26,7 @@ config.get('auth:token');
 *Anti-features*
 - No mutation of existing configs (just overwriting)
 - Can not remove configs once added
-- Doe snot read in from the file system. You must provide the JS objects.
+- Does not read in from the file system. You must provide the JS objects.
 
 
 
@@ -35,7 +35,7 @@ Each function will return the instance of the library to allow chaining.
 
 ### opts
 You can pass the following options:
-- `sep` - a custom separator pattern to be used for just that source. Useful for parsing values from environment with limited character sets. *default: `/[:|\.|__]+/`*
+- `sep` - a custom separator pattern to be used for just that source. Useful for parsing values from environment with limited character sets. *default: `/:|\.|__/`*, macthes on `:`, `.` or `__`
 - `lowercase` - a boolean to set if you would like all the keys from the source to be lowercase. *default: `false`*
 
 

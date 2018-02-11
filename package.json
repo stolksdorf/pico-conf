@@ -1,8 +1,8 @@
 {
   "name": "pico-conf",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A tiny config manager for node and browser",
-  "main": "pico-config.js",
+  "main": "pico-conf.js",
   "scripts": {
     "test": "pico-check test.js test_arg=5 TEST:ARG=true",
     "dev": "pico-check -w -v test.js"
@@ -11,5 +11,6 @@
   "license": "ISC",
   "devDependencies": {
     "pico-check": "^1.0.3"
-  }
+  },
+  "dependencies": {}
 }

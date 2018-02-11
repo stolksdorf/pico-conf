@@ -1,7 +1,7 @@
 let overrides = {}, configs = {}, defaults = {};
-let getSeparator = /[:|\.|__]+/;
+let getSeparator = /:|\.|__/;
 let defaultOpts = {
-	sep : /[:|\.|__]+/,
+	sep : /:|\.|__/,
 	lowercase : false,
 };
 
@@ -20,22 +20,18 @@ const parse = (target, obj, opts={}, paths=[])=>{
 	}
 };
 const set = (target, paths, val)=>{
-	let key;
-	while(paths.length){
-		key = paths.shift();
-		if(!paths.length && notSet(target[key])) target[key] = val;
-		if(!target[key]) target[key] = {};
-		target = target[key];
-	};
+	if(paths.length == 1){
+		if(notSet(target[paths[0]])) target[paths[0]] = val;
+		return;
+	}
+	if(typeof target[paths[0]] !== 'object') target[paths[0]]={};
+	return set(target[paths[0]], paths.slice(1), val);
 };
 const get = (target, paths)=>{
-	let curr = target;
-	for(i=0;i<paths.length;++i){
-		if(notSet(curr[paths[i]])) return;
-		curr = curr[paths[i]];
-	}
-	return curr;
-};
+	if(paths.length == 0) return target;
+	if(notSet(target[paths[0]])) return;
+	return get(target[paths[0]], paths.slice(1));
+}
 
 const Config = {
 	env : (opts)=>Config.add(process.env, opts),

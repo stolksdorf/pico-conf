@@ -1,5 +1,5 @@
 const test = require('pico-check');
-const conf = require('./pico-config.js');
+const conf = require('./pico-conf.js');
 const pckg = require('./package.json');
 
 test.group('add', (test)=>{
@@ -39,7 +39,7 @@ test.group('overrides & defaults', (test)=>{
 });
 
 
-test.skip().group('Comamnd line args', (test)=>{
+test.group('Comamnd line args', (test)=>{
 	conf.argv({sep : ':', lowercase:true});
 
 	test('can get command line args', (t)=>t.is(conf.get('test_arg'), 5));
@@ -56,11 +56,22 @@ test.group('Environment variables', (test)=>{
 
 
 test.group('edge cases', (test)=>{
-	test.skip('merges into an non-object key', (t)=>{
-
+	test('merges into an non-object key', (t)=>{
+		conf.add({
+			a__b : 444,
+			a__b__c : 333
+		})
+		t.not(conf.get('a:b'), 444);
+		t.is(conf.get('a:b:c'), 333);
 	});
-	test.skip('custom get separator', (t)=>{
-
+	test('custom get separator', (t)=>{
+		conf.sep('&&&');
+		conf.add({
+			custom_sep : {
+				test : 5
+			}
+		})
+		t.is(conf.get('custom_sep&&&test'), 5);
 	})
 	test('required throws an error', (t)=>{
 		let pass
