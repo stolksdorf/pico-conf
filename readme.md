@@ -5,10 +5,10 @@ A tiny config manager for javascript. Inspired by [nconf](https://www.npmjs.com/
 
 ```js
 const config = require('pico-conf')
-	.argv()
-	.env({lowercase:true})
-	.add(require(`./config/${process.env.NODE_ENV}.js`))
-	.defaults(require('./config/defaults.json'));
+  .argv()
+  .env({lowercase:true})
+  .add(require(`./config/${process.env.NODE_ENV}.js`))
+  .defaults(require('./config/defaults.json'));
 
 config.get('auth:token');
 ```
@@ -46,7 +46,7 @@ You can pass the following options:
 Parses the `configObj` and adds it into `pico-conf`s memory. It will not overwrite existing values, use `.override()` or `.defaults()` to control precendence order.
 ```js
 config.add({ alpha: 0.8, test : 6 })
-	.add({ alpha: false, 'yo-yo' : true }, {sep : '-'});
+  .add({ alpha: false, 'yo-yo' : true }, {sep : '-'});
 
 config.get('alpha'); // 0.8
 config.get('yo:yo'); // true
@@ -70,7 +70,7 @@ config.get(auth);
 Parses the `configObj` and adds it into `pico-conf`s defaults memory using `.add()`, which will be looked up last when using `.get()`.
 ```js
 config.defaults({a : 1, b : 5})
-    .add({a : 6});
+  .add({a : 6});
 
 config.get('a'); // 6
 config.get('b'); // 5
@@ -93,10 +93,10 @@ Sets the separator pattern used for `.get()`. Defaults to the regex to match on 
 Takes an array of config paths and ensures that they are set. If not it will throw an error listing which config paths are not set.
 ```js
 try{
-	config.add({a : true})
-		.required(['a', 'b', 'c'])
+  config.add({a : true})
+    .required(['a', 'b', 'c'])
 }catch(err){
-    console.log(err); //Config values: b, c are missing and are expected to be set.
+  console.log(err); //Config values: b, c are missing and are expected to be set.
 }
 ```
 
@@ -113,7 +113,7 @@ try{
 const yaml = requrie('require-yml');
 
 const config = require('pico-config')
-	.add(yaml('./config/user-settings.yaml'))
-	.add()
+  .add(yaml('./config/user-settings.yaml'))
+  .add()
 
 ```
