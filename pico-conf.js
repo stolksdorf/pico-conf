@@ -4,11 +4,12 @@ let defaultOpts = {
 	sep : /:|\.|__/,
 	lowercase : false,
 };
+const isObject = (obj)=>obj === Object(obj) && Object.prototype.toString.call(obj) !== '[object Array]'
 
 const notSet = (val)=>!val&&val!==false;
 const parse = (target, obj, opts={}, paths=[])=>{
 	opts = Object.assign({}, defaultOpts, opts);
-	if(typeof obj == 'object'){
+	if(isObject(obj)){
 		Object.keys(obj).map((key)=>{
 			const newKey = (opts.lowercase ? key.toLowerCase() : key);
 			const temp = newKey.split(opts.sep);
@@ -60,7 +61,7 @@ const Config = {
 		return Config;
 	},
 	required : (keys, message)=>{
-		if(!Array.isArray) keys = [keys];
+		if(!Array.isArray(keys)) keys = [keys];
 		const missing = keys.filter((key)=>notSet(Config.get(key)));
 		if(missing.length) throw `Config values: ${missing.join(', ')} are missing and are expected to be set.`;
 		return Config;

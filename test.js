@@ -24,6 +24,14 @@ test.group('add', (test)=>{
 	test('returns undefined for deep bad path', (t)=>t.is(conf.get('not:there'), undefined));
 });
 
+test('arrays', (t)=>{
+	conf.add({arr1 : [1,2,3]});
+
+	t.ok(Array.isArray(conf.get('arr1')));
+	t.is(conf.get('arr1').length, 3);
+	t.is(conf.get('arr1'), [1,2,3]);
+})
+
 test.group('overrides & defaults', (test)=>{
 	conf
 		.add({or1 : true})
