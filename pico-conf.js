@@ -71,6 +71,7 @@ const Config = {
 		let result = get(overrides, paths);
 		if(notSet(result)) result = get(configs, paths);
 		if(notSet(result)) result = get(defaults, paths);
+		if(notSet(result)) throw `Config value: ${path} is missing/not set.`;
 		return result;
 	}
 }

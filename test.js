@@ -21,7 +21,9 @@ test.group('add', (test)=>{
 	test('custom separator', (t)=>t.is(conf.get('add2:add3'), 6));
 	test('lowercase works', (t)=>t.is(conf.get('auth'), true));
 	test('can not overwrite', (t)=>t.is(conf.get('addoverwrite'), 5));
-	test('returns undefined for deep bad path', (t)=>t.is(conf.get('not:there'), undefined));
+	test('throws error for deep bad path', (t)=>{
+		t.throws(()=>conf.get('not:there'));
+	});
 });
 
 test('arrays', (t)=>{
