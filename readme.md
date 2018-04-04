@@ -83,8 +83,10 @@ Parses the `configObj` and adds it into `pico-conf`s overrides memory using `.ad
 
 ### getting
 
-#### `.get(configPath)`
+#### `.get(configPath, [allowEmpty])`
 Separates the `configPath` and looks up the corresponding value in the override, then config, then default memory. Uses the separator set by using `.sep()`.
+
+By default if the `configPath` is not set this will throw an error. You can turn off this behaviour by passing `true` as the second parameter. eg. `config.get('not:set', true)`
 
 #### `.sep(separatorPattern)`
 Sets the separator pattern used for `.get()`. Defaults to the regex to match on `:`, `.`, or `__`.

@@ -62,16 +62,16 @@ const Config = {
 	},
 	required : (keys, message)=>{
 		if(!Array.isArray(keys)) keys = [keys];
-		const missing = keys.filter((key)=>notSet(Config.get(key)));
+		const missing = keys.filter((key)=>notSet(Config.get(key, true)));
 		if(missing.length) throw `Config values: ${missing.join(', ')} are missing and are expected to be set.`;
 		return Config;
 	},
-	get : (path)=>{
+	get : (path, allowEmpty=false)=>{
 		const paths = path.split(getSeparator);
 		let result = get(overrides, paths);
 		if(notSet(result)) result = get(configs, paths);
 		if(notSet(result)) result = get(defaults, paths);
-		if(notSet(result)) throw `Config value: ${path} is missing/not set.`;
+		if(notSet(result) && !allowEmpty) throw `Config value: ${path} is missing/not set.`;
 		return result;
 	}
 }
