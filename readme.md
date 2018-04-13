@@ -79,6 +79,9 @@ config.get('b'); // 5
 #### `.overrides(configObj, [opts])`
 Parses the `configObj` and adds it into `pico-conf`s overrides memory using `.add()`, which will be looked up first when using `.get()`.
 
+#### `.clear()`
+Completely clears out all configs set, including `overrides` and `defaults`.
+
 
 
 ### getting
@@ -86,13 +89,17 @@ Parses the `configObj` and adds it into `pico-conf`s overrides memory using `.ad
 #### `.get(configPath, [allowEmpty])`
 Separates the `configPath` and looks up the corresponding value in the override, then config, then default memory. Uses the separator set by using `.sep()`.
 
+#### `.has(configPath)`
+Returns either `true` or `false` depending on whether the config value has been set or not.
+
 By default if the `configPath` is not set this will throw an error. You can turn off this behaviour by passing `true` as the second parameter. eg. `config.get('not:set', true)`
 
 #### `.sep(separatorPattern)`
-Sets the separator pattern used for `.get()`. Defaults to the regex to match on `:`, `.`, or `__`.
+Sets the separator pattern used for `.get()`. Defaults to the regex to match on `:`, `.`, or `__`. If you pass nothing it will reset back to the default.
 
 #### `.required(configPaths)`
 Takes an array of config paths and ensures that they are set. If not it will throw an error listing which config paths are not set.
+
 ```js
 try{
   config.add({a : true})
@@ -101,8 +108,6 @@ try{
   console.log(err); //Config values: b, c are missing and are expected to be set.
 }
 ```
-
-
 
 
 ## Best practices

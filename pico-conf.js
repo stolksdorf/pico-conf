@@ -35,6 +35,7 @@ const get = (target, paths)=>{
 };
 
 const Config = {
+	raw : ()=>{ return {overrides, configs, defaults} },
 	env : (opts)=>Config.add(process.env, opts),
 	argv : (opts)=>{
 		const obj = process.argv.slice(2).reduce((acc, arg)=>{
@@ -57,7 +58,7 @@ const Config = {
 		return Config;
 	},
 	sep : (newSep)=>{
-		getSeparator=newSep;
+		getSeparator = (!!newSep ? newSep : defaultOpts.sep);
 		return Config;
 	},
 	required : (keys, message)=>{
@@ -66,6 +67,7 @@ const Config = {
 		if(missing.length) throw `Config values: ${missing.join(', ')} are missing and are expected to be set.`;
 		return Config;
 	},
+	clear : ()=>{ overrides={}; configs={}; defaults={}; return Config; },
 	get : (path, allowEmpty=false)=>{
 		const paths = path.split(getSeparator);
 		let result = get(overrides, paths);
@@ -73,6 +75,14 @@ const Config = {
 		if(notSet(result)) result = get(defaults, paths);
 		if(notSet(result) && !allowEmpty) throw `Config value: ${path} is missing/not set.`;
 		return result;
-	}
+	},
+	has : (path)=>{
+		try{
+			Config.get(path);
+			return true;
+		}catch(err){
+			return false;
+		}
+	},
 }
 module.exports = Config;
