@@ -2,6 +2,12 @@ const test = require('pico-check');
 const conf = require('./pico-conf.js');
 const pckg = require('./package.json');
 
+test.group('clear', (test)=>{
+
+
+
+});
+
 test.group('add', (test)=>{
 	conf.add({
 		add1 : true,
@@ -65,7 +71,7 @@ test.group('Environment variables', (test)=>{
 });
 
 
-test.group('edge cases', (test)=>{
+test.group('Edge cases', (test)=>{
 	test('merges into an non-object key', (t)=>{
 		conf.add({
 			a__b : 444,
@@ -82,7 +88,14 @@ test.group('edge cases', (test)=>{
 			}
 		})
 		t.is(conf.get('custom_sep&&&test'), 5);
+	});
+	test('Does not throw error if allowEmpty is set', (t)=>{
+		t.no(conf.get('i__do__not__exist', true));
 	})
+});
+
+
+test.group('Required', (test)=>{
 	test('required throws an error', (t)=>{
 		let pass
 		try{
@@ -93,7 +106,8 @@ test.group('edge cases', (test)=>{
 	test('required does not throw if all populated', (t)=>{
 		try{conf.required(['add1'])}catch(err){ t.fail() }
 	});
-})
+});
+
 
 module.exports = test;
 

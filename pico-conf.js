@@ -5,8 +5,8 @@ let defaultOpts = {
 	lowercase : false,
 };
 const isObject = (obj)=>obj === Object(obj) && Object.prototype.toString.call(obj) !== '[object Array]'
-
 const notSet = (val)=>!val&&val!==false;
+
 const parse = (target, obj, opts={}, paths=[])=>{
 	opts = Object.assign({}, defaultOpts, opts);
 	if(isObject(obj)){
@@ -32,7 +32,7 @@ const get = (target, paths)=>{
 	if(paths.length == 0) return target;
 	if(notSet(target[paths[0]])) return;
 	return get(target[paths[0]], paths.slice(1));
-}
+};
 
 const Config = {
 	env : (opts)=>Config.add(process.env, opts),
