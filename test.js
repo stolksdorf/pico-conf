@@ -45,9 +45,9 @@ test.group('add', (test)=>{
 test.group('overrides & defaults', (test)=>{
 	test('setup', (t)=>{
 		conf
-			.add({or1 : true})
-			.overrides({or1 : 888, or2: 999})
-			.defaults({def1 : 555, def2 : 222})
+			.add({or1 : true, def3 : { def3a : 10}})
+			.overrides({or1 : 888, or2: 999, def3: { def3c : false}})
+			.defaults({def1 : 555, def2 : 222, def3 : { def3a : 5, def3b : 6}})
 			.add({def1 : 444})
 	});
 
@@ -56,6 +56,16 @@ test.group('overrides & defaults', (test)=>{
 
 	test('overrides works', (t)=>t.is(conf.get('or2'), 999));
 	test('overrides can not be overriden', (t)=>t.is(conf.get('or1'), 888));
+
+	test('objects are merged across storage', (t)=>{
+		t.is(conf.get('def3:def3a'), 10);
+		t.is(conf.get('def3:def3b'), 6);
+		t.is(conf.get('def3'), {
+			def3a : 10,
+			def3b : 6,
+			def3c : false
+		});
+	});
 });
 
 

@@ -2,9 +2,9 @@ let overrides = {}, configs = {}, defaults = {};
 let getSeparator = /:|\.|__/;
 let defaultOpts = {
 	sep : /:|\.|__/,
-	lowercase : false,
+	lowercase : true,
 };
-const isObject = (obj)=>obj === Object(obj) && Object.prototype.toString.call(obj) !== '[object Array]'
+const isObject = (item)=>(item && typeof item === 'object' && !Array.isArray(item));
 const notSet = (val)=>!val&&val!==false;
 
 const parse = (target, obj, opts={}, paths=[])=>{
@@ -32,6 +32,20 @@ const get = (target, paths)=>{
 	if(paths.length == 0) return target;
 	if(notSet(target[paths[0]])) return;
 	return get(target[paths[0]], paths.slice(1));
+};
+const merge = (...args)=>{
+	return args.reduce((acc, obj) => {
+		if(!isObject(obj)) return notSet(obj) ? acc : obj;
+		if(!isObject(acc)) acc = {};
+		Object.keys(obj).forEach(key => {
+			const accVal = acc[key];
+			const objVal = obj[key];
+			acc[key] = (isObject(accVal) || isObject(objVal))
+				? merge(accVal, objVal)
+				: objVal;
+		});
+		return acc;
+	});
 };
 
 const Config = {
@@ -70,9 +84,7 @@ const Config = {
 	clear : ()=>{ overrides={}; configs={}; defaults={}; return Config; },
 	get : (path, allowEmpty=false)=>{
 		const paths = path.split(getSeparator);
-		let result = get(overrides, paths);
-		if(notSet(result)) result = get(configs, paths);
-		if(notSet(result)) result = get(defaults, paths);
+		const result = merge(get(defaults, paths), get(configs, paths), get(overrides, paths));
 		if(notSet(result) && !allowEmpty) throw `Config value: ${path} is missing/not set.`;
 		return result;
 	},
@@ -80,9 +92,8 @@ const Config = {
 		try{
 			Config.get(path);
 			return true;
-		}catch(err){
-			return false;
-		}
+		}catch(err){ return false; }
 	},
-}
+};
+Config.set = Config.add;
 module.exports = Config;
