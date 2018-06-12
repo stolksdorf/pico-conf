@@ -9,7 +9,7 @@ const notSet = (val)=>!val&&val!==false;
 
 const parse = (target, obj, opts={}, paths=[])=>{
 	opts = Object.assign({}, defaultOpts, opts);
-	if(isObject(obj)){
+	if(isObject(obj) && Object.keys(obj).length !== 0){
 		Object.keys(obj).map((key)=>{
 			const newKey = (opts.lowercase ? key.toLowerCase() : key);
 			const temp = newKey.split(opts.sep);

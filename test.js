@@ -105,7 +105,8 @@ test.group('Edge cases', (test)=>{
 	test('merges into an non-object key', (t)=>{
 		conf.add({
 			a__b : 444,
-			a__b__c : 333
+			a__b__c : 333,
+			empty : {}
 		});
 		t.not(conf.get('a:b'), 444);
 		t.is(conf.get('a:b:c'), 333);
@@ -123,7 +124,10 @@ test.group('Edge cases', (test)=>{
 	});
 	test('Does not throw error if allowEmpty is set', (t)=>{
 		t.no(conf.get('i__do__not__exist', true));
-	})
+	});
+	test('Can get an empty object', (t)=>{
+		t.is(conf.get('empty'), {});
+	});
 });
 
 test.group('Required', (test)=>{
