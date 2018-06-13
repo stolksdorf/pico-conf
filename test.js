@@ -102,11 +102,12 @@ test.group('Methods', (test)=>{
 });
 
 test.group('Edge cases', (test)=>{
+
+	test('setup', (t)=>{conf.clear()});
 	test('merges into an non-object key', (t)=>{
 		conf.add({
 			a__b : 444,
 			a__b__c : 333,
-			empty : {}
 		});
 		t.not(conf.get('a:b'), 444);
 		t.is(conf.get('a:b:c'), 333);
@@ -126,8 +127,13 @@ test.group('Edge cases', (test)=>{
 		t.no(conf.get('i__do__not__exist', true));
 	});
 	test('Can get an empty object', (t)=>{
+		conf.add({ empty : {}});
 		t.is(conf.get('empty'), {});
 	});
+	test('Can overwrite empty objects', (t)=>{
+		conf.defaults({empty : {a : 6}});
+		t.is(conf.get('empty.a'), 6)
+	})
 });
 
 test.group('Required', (test)=>{

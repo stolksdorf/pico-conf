@@ -21,6 +21,7 @@ const parse = (target, obj, opts={}, paths=[])=>{
 	}
 };
 const set = (target, paths, val)=>{
+	if(paths.length == 0) return;
 	if(paths.length == 1){
 		if(notSet(target[paths[0]])) target[paths[0]] = val;
 		return;
