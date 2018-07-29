@@ -52,6 +52,14 @@ config.get('alpha'); // 0.8
 config.get('yo:yo'); // true
 ```
 
+#### `.file(configFilePath, [opts])`
+Tries to `require` a config file located at `configFilePath` and then `.add()` it. Fails gracefully if it can't find it.
+```js
+config.file('../package.json');
+
+config.get('name'); // 'pico-conf'
+```
+
 #### `.env([opts])`
 Parses the environment variables and adds it into `pico-conf`s memory using `.add()`.
 ```js

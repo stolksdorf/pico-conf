@@ -1,6 +1,6 @@
 const test = require('pico-check');
-const conf = require('./pico-conf.js');
-const pckg = require('./package.json');
+const conf = require('../pico-conf.js');
+const pckg = require('../package.json');
 
 test('initialize', (t)=>{ conf.clear(); });
 
@@ -65,6 +65,19 @@ test.group('overrides & defaults', (test)=>{
 			def3b : 6,
 			def3c : false
 		});
+	});
+});
+
+test.group('file', (test)=>{
+	test('setup', (t)=>conf.clear());
+	test('can require in file', (t)=>{
+		conf.file('../package.json');
+		t.is(conf.get('name'), 'pico-conf')
+	});
+
+	test('can handle a non-existant config file', (t)=>{
+		conf.file('./pookage.json');
+
 	});
 });
 
@@ -149,5 +162,7 @@ test.group('Required', (test)=>{
 		try{conf.required(['required1'])}catch(err){ t.fail() }
 	});
 });
+
+
 
 module.exports = test;
