@@ -7,6 +7,15 @@ let defaultOpts = {
 const isObject = (item)=>(item && typeof item === 'object' && !Array.isArray(item));
 const notSet = (val)=>!val&&val!==false;
 
+
+const getCallerFile = (offset=0)=>{
+	const cache = Error.prepareStackTrace;
+	Error.prepareStackTrace = (_, stack)=>stack;
+	const target = (new Error()).stack[2+offset];
+	Error.prepareStackTrace = cache;
+	return target.getFileName();
+};
+
 const parse = (target, obj, opts={}, paths=[])=>{
 	opts = Object.assign({}, defaultOpts, opts);
 	if(isObject(obj) && Object.keys(obj).length !== 0){
@@ -71,6 +80,15 @@ const Config = {
 	overrides : (obj, opts)=>{
 		parse(overrides, obj, opts);
 		return Config;
+	},
+	file : (path, opts)=>{
+		const caller = getCallerFile();
+		try{
+			const obj = require(require.resolve(path, {paths : [caller]}));
+			return Config.add(obj, opts);
+		}catch(err){
+			console.error(`Can not find config file: '${path}' from '${caller}'`);
+		}
 	},
 	sep : (newSep)=>{
 		getSeparator = (!!newSep ? newSep : defaultOpts.sep);
