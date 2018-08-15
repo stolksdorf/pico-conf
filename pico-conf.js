@@ -89,6 +89,7 @@ const Config = {
 		}catch(err){
 			console.error(`Can not find config file: '${path}' from '${caller}'`);
 		}
+		return Config;
 	},
 	sep : (newSep)=>{
 		getSeparator = (!!newSep ? newSep : defaultOpts.sep);
