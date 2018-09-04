@@ -7,7 +7,6 @@ let defaultOpts = {
 const isObject = (item)=>(item && typeof item === 'object' && !Array.isArray(item));
 const notSet = (val)=>!val&&val!==false;
 
-
 const getCallerFile = (offset=0)=>{
 	const cache = Error.prepareStackTrace;
 	Error.prepareStackTrace = (_, stack)=>stack;
@@ -84,8 +83,7 @@ const Config = {
 	file : (path, opts)=>{
 		const caller = getCallerFile();
 		try{
-			const obj = require(require.resolve(path, {paths : [caller]}));
-			return Config.add(obj, opts);
+			return Config.add(require(require.resolve(path, {paths : [caller]})), opts);
 		}catch(err){
 			console.error(`Can not find config file: '${path}' from '${caller}'`);
 		}

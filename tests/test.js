@@ -77,7 +77,7 @@ test.group('file', (test)=>{
 
 	test('can handle a non-existant config file', (t)=>{
 		conf.file('./pookage.json');
-
+		t.pass();
 	});
 });
 
