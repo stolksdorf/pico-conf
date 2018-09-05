@@ -79,6 +79,11 @@ test.group('file', (test)=>{
 		conf.file('./pookage.json');
 		t.pass();
 	});
+
+	test('env test' , (t) => {
+		conf.file(`./${process.env.NODE_ENV}.js`);
+		t.is(conf.get('test_env'), 'foobar');
+	})
 });
 
 

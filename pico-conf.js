@@ -1,3 +1,4 @@
+const dir = require('path').dirname;
 let overrides = {}, configs = {}, defaults = {};
 let getSeparator = /:|\.|__/;
 let defaultOpts = {
@@ -83,7 +84,7 @@ const Config = {
 	file : (path, opts)=>{
 		const caller = getCallerFile();
 		try{
-			return Config.add(require(require.resolve(path, {paths : [caller]})), opts);
+			return Config.add(require(require.resolve(path, {paths : [dir(caller)]})), opts);
 		}catch(err){
 			console.error(`Can not find config file: '${path}' from '${caller}'`);
 		}

@@ -1,10 +1,10 @@
 {
   "name": "pico-conf",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "A tiny config manager for node and browser",
   "main": "pico-conf.js",
   "scripts": {
-    "test": "pico-check tests/test.js test_arg=5 TEST:ARG=true",
+    "test": "pico-check -v tests/test.js test_arg=5 TEST:ARG=true",
     "dev": "pico-check -w -v tests/test.js test_arg=5 TEST:ARG=true"
   },
   "author": "stolksdorf",
