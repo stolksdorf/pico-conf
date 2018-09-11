@@ -8,12 +8,12 @@ let defaultOpts = {
 const isObject = (item)=>(item && typeof item === 'object' && !Array.isArray(item));
 const notSet = (val)=>!val&&val!==false;
 
-const getCallerFile = (offset=0)=>{
+const getCaller = (offset=0)=>{
 	const cache = Error.prepareStackTrace;
 	Error.prepareStackTrace = (_, stack)=>stack;
 	const target = (new Error()).stack[2+offset];
 	Error.prepareStackTrace = cache;
-	return target.getFileName();
+	return target;
 };
 
 const parse = (target, obj, opts={}, paths=[])=>{
@@ -82,11 +82,11 @@ const Config = {
 		return Config;
 	},
 	file : (path, opts)=>{
-		const caller = getCallerFile();
+		const caller = getCaller();
 		try{
-			return Config.add(require(require.resolve(path, {paths : [dir(caller)]})), opts);
+			return Config.add(require(require.resolve(path, {paths : [dir(caller.getFileName())]})), opts);
 		}catch(err){
-			console.error(`Can not find config file: '${path}' from '${caller}'`);
+			console.error(`Can not find config file: '${path}' from '${caller.getFileName()}'`);
 		}
 		return Config;
 	},
@@ -104,7 +104,10 @@ const Config = {
 	get : (path, allowEmpty=false)=>{
 		const paths = path.split(getSeparator);
 		const result = merge(get(defaults, paths), get(configs, paths), get(overrides, paths));
-		if(notSet(result) && !allowEmpty) throw `Config value: ${path} is missing/not set.`;
+		if(notSet(result) && !allowEmpty){
+			const caller = getCaller();
+			throw `Config value: ${path} is missing/not set. \n${caller.getFileName()}:${caller.getLineNumber()}`;
+		}
 		return result;
 	},
 	has : (path)=>{
