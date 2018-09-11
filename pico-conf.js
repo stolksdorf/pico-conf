@@ -94,10 +94,10 @@ const Config = {
 		getSeparator = (!!newSep ? newSep : defaultOpts.sep);
 		return Config;
 	},
-	required : (keys, message)=>{
+	required : (keys, message='')=>{
 		if(!Array.isArray(keys)) keys = [keys];
 		const missing = keys.filter((key)=>notSet(Config.get(key, true)));
-		if(missing.length) throw `Config values: ${missing.join(', ')} are missing and are expected to be set.`;
+		if(missing.length) throw `Config values: ${missing.join(', ')} are missing and are expected to be set. ${message}`;
 		return Config;
 	},
 	clear : ()=>{ overrides={}; configs={}; defaults={}; return Config; },
