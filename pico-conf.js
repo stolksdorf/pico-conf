@@ -86,7 +86,11 @@ const Config = {
 		try{
 			return Config.add(require(require.resolve(path, {paths : [dir(caller.getFileName())]})), opts);
 		}catch(err){
-			console.error(`Can not find config file: '${path}' from '${caller.getFileName()}'`);
+			if(err.message.indexOf('Cannot find module') !== -1){
+				return console.error(`Can not find config file: '${path}' from '${caller.getFileName()}'`);
+			}
+			console.error(`Could not load config file: '${path}' from '${caller.getFileName()}'`);
+			throw err;
 		}
 		return Config;
 	},

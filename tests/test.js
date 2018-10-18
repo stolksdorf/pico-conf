@@ -80,6 +80,14 @@ test.group('file', (test)=>{
 		t.pass();
 	});
 
+	test('can handle a badly formatted config file', (t)=>{
+
+		t.throws(()=>{
+			conf.file('./bad_formatted.config.js');
+		})
+
+	});
+
 	test('env test' , (t) => {
 		conf.file(`./${process.env.NODE_ENV}.js`);
 		t.is(conf.get('test_env'), 'foobar');
