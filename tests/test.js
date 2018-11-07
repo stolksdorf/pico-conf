@@ -76,16 +76,15 @@ test.group('file', (test)=>{
 	});
 
 	test('can handle a non-existant config file', (t)=>{
-		conf.file('./pookage.json');
+		const c = conf.file('./pookage.json');
 		t.pass();
+		t.ok(typeof c == 'object', 'Make sure it returns a conf object');
 	});
 
 	test('can handle a badly formatted config file', (t)=>{
-
 		t.throws(()=>{
 			conf.file('./bad_formatted.config.js');
 		})
-
 	});
 
 	test('env test' , (t) => {
