@@ -16,6 +16,17 @@ const getCaller = (offset=0)=>{
 	return target;
 };
 
+const deepLock = (obj)=>{
+	if(Object.isFrozen(obj)) return obj;
+	for(const key of Object.getOwnPropertyNames(obj)){
+		const val = obj[key];
+		obj[key] = (val && typeof val === 'object')
+			? deepLock(val)
+			: val;
+	}
+	return Object.freeze(obj);
+}
+
 const parse = (target, obj, opts={}, paths=[])=>{
 	opts = Object.assign({}, defaultOpts, opts);
 	if(isObject(obj) && Object.keys(obj).length !== 0){
@@ -105,7 +116,17 @@ const Config = {
 		if(missing.length) throw `Config values: ${missing.join(', ')} are missing and are expected to be set. ${message}`;
 		return Config;
 	},
-	clear : ()=>{ overrides={}; configs={}; defaults={}; return Config; },
+	lock : ()=>{
+		defaults = deepLock(defaults);
+		configs = deepLock(configs);
+		overrides = deepLock(overrides);
+		return Config;
+	},
+	clear : ()=>{
+		if(Object.isFrozen(configs)) return console.error('Could not execute .clear(); Config is locked.');
+		overrides={}; configs={}; defaults={};
+		return Config;
+	},
 	get : (path, allowEmpty=false)=>{
 		const paths = path.split(getSeparator);
 		const result = merge(get(defaults, paths), get(configs, paths), get(overrides, paths));

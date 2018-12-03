@@ -90,6 +90,8 @@ Parses the `configObj` and adds it into `pico-conf`s overrides memory using `.ad
 #### `.clear()`
 Completely clears out all configs set, including `overrides` and `defaults`.
 
+#### `.lock()`
+Locks down all value within the config so they can not be further added to or overwritten. Recurisvely calls [Object.freeze()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze) on the internal config structure. Will throw proper errors if using `strict mode`.
 
 
 ### getting
