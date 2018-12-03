@@ -28,6 +28,7 @@ const deepLock = (obj)=>{
 }
 
 const parse = (target, obj, opts={}, paths=[])=>{
+	if(Object.isFrozen(target)) throw 'Can not modify configs; pico-check are locked';
 	opts = Object.assign({}, defaultOpts, opts);
 	if(isObject(obj) && Object.keys(obj).length !== 0){
 		Object.keys(obj).map((key)=>{
@@ -123,7 +124,7 @@ const Config = {
 		return Config;
 	},
 	clear : ()=>{
-		if(Object.isFrozen(configs)) return console.error('Could not execute .clear(); Config is locked.');
+		if(Object.isFrozen(configs)) return console.error('Could not execute .clear(); pico-check is locked.');
 		overrides={}; configs={}; defaults={};
 		return Config;
 	},

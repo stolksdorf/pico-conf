@@ -70,6 +70,10 @@ test.group('add', (test)=>{
 		t.not(obj, conf.get('test2'));
 	});
 
+	test('can not add more to the config', (t)=>{
+		t.throws(()=>conf.add({ newProp : 6 }));
+	});
+
 	test('clear should not run if locked', (t)=>{
 		conf.clear();
 		t.is(conf.get('test1'), true);

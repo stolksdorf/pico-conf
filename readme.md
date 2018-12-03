@@ -93,6 +93,14 @@ Completely clears out all configs set, including `overrides` and `defaults`.
 #### `.lock()`
 Locks down all value within the config so they can not be further added to or overwritten. Recurisvely calls [Object.freeze()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze) on the internal config structure. Will throw proper errors if using `strict mode`.
 
+```js
+config.defaults({a : 1, b : 5})
+  .add({a : 6});
+
+config.get('a'); // 6
+config.get('b'); // 5
+```
+
 
 ### getting
 
