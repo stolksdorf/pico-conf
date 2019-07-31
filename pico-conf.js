@@ -5,7 +5,6 @@ const defaultOpts = {
 	sep       : /:|\.|__/,
 	lowercase : true,
 };
-const ScriptName = 'picoconf_client_configs';
 const isObject = (item)=>(item && typeof item === 'object' && !Array.isArray(item));
 const notSet = (val)=>!val && val !== false;
 
@@ -61,9 +60,10 @@ const merge = (...args)=>{
 };
 
 const Config = {
-	raw  : ()=>{ return { overrides, configs, defaults }; },
-	env  : (opts)=>Config.add(process.env, opts),
-	argv : (opts)=>{
+	clientVar : 'picoconf_client_configs',
+	raw       : ()=>{ return { overrides, configs, defaults }; },
+	env       : (opts)=>Config.add(process.env, opts),
+	argv      : (opts)=>{
 		const obj = process.argv.slice(2).reduce((acc, arg)=>{
 			const parts = arg.split('=');
 			if(parts.length == 2) acc[parts[0]] = parts[1];
@@ -74,7 +74,7 @@ const Config = {
 	add       : (obj, opts)=>{ parse(configs, obj, opts); return Config; },
 	defaults  : (obj, opts)=>{ parse(defaults, obj, opts); return Config; },
 	overrides : (obj, opts)=>{ parse(overrides, obj, opts); return Config; },
-	file      : (path, opts)=>{
+	file      : (path, opts = {})=>{
 		const { filename } = getTrace(1);
 		try {
 			return Config.add(require(require.resolve(path, { paths : [dir(filename)] })), opts);
@@ -132,13 +132,13 @@ Config.getClientObj = ()=>{
 		return result;
 	}, {});
 };
-Config.generateClientScript = ()=>`${ScriptName}=${JSON.stringify(Config.getClientObj())};`;
+Config.generateClientScript = ()=>`${Config.clientVar}=${JSON.stringify(Config.getClientObj())};`;
 Config.loadClientScript = ()=>{
-	if(typeof global !== 'undefined' && typeof global[ScriptName] === 'object'){
-		Config.add(global[ScriptName]);
+	if(typeof global !== 'undefined' && typeof global[Config.clientVar] === 'object'){
+		Config.add(global[Config.clientVar]);
 	}
-	if(typeof window !== 'undefined' && typeof window[ScriptName] === 'object'){
-		Config.add(window[ScriptName]);
+	if(typeof window !== 'undefined' && typeof window[Config.clientVar] === 'object'){
+		Config.add(window[Config.clientVar]);
 	}
 };
 

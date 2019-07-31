@@ -128,6 +128,23 @@ try{
 }
 ```
 
+### client-side
+Exposing client-side configs safely can be difficult. `pico-conf` comes with utilities for opt-ing in which configs should be exposed client-side.
+
+#### `.client(path) / .client([paths])`
+Flags the `path` or array of `paths` to be allowed to be exposed client-side.
+
+#### `.getClientObj()`
+Returns an object with all the client-side paths `.get()`;
+
+#### `.generateClientScript()`
+Returns a string of the js-code of `.getClientObj()` JSON-stringified and set to `.clientVar`. When generating your HTML to send client-side, call this function in a `<script>` tag in the `<head>`. This will store and expose your client-side configs globally.
+
+
+#### `.loadClientScript()`
+Attempts to load any config data stored at `.clientVar` into `pico-conf` using `.add()`. It will look at either `window` or `global` to try and find the config. This function is called whenever `pico-conf` is loaded, so if client data has already been populated in the global scope, it will be implictly added.
+
+
 
 ## Best practices
 
