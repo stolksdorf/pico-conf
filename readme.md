@@ -53,7 +53,7 @@ config.get('yo:yo'); // true
 ```
 
 #### `.file(configFilePath, [opts])`
-Tries to `require` a config file located at `configFilePath` and then `.add()` it. Fails gracefully if it can't find it.
+Tries to `require` a config file located at `configFilePath` and then `.add()` it. Fails gracefully if it can't find it. Pass `opts.silent=true` to hide any console error messages.
 ```js
 config.file('../package.json');
 
