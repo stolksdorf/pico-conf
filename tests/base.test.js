@@ -6,9 +6,9 @@ test('initialize', (t)=>{ conf.clear(); });
 
 test('clear configs', (t)=>{
 	conf
-		.overrides({override_clear : true})
-		.add({add_clear : true})
-		.defaults({defaults_clear : true});
+		.overrides({ override_clear : true })
+		.add({ add_clear : true })
+		.defaults({ defaults_clear : true });
 	conf.clear();
 	t.throws(()=>conf.get('override_clear'));
 	t.throws(()=>conf.get('add_clear'));
@@ -18,21 +18,21 @@ test('clear configs', (t)=>{
 test.group('add', (test)=>{
 	test('setup', (t)=>{
 		conf.add({
-			add1 : true,
+			add1       : true,
 			add2__add3 : 6,
-			add2 : {
+			add2       : {
 				add4 : 'yes',
 			},
-			addoverwrite : 5
-		}, {sep : '__'})
-		.add({
-			AUTH : true,
-			addOverwrite : 7
-		}, {lowercase:true});
+			addoverwrite : 5,
+		}, { sep : '__' })
+			.add({
+				AUTH         : true,
+				addOverwrite : 7,
+			}, { lowercase : true });
 	});
 
-	test('basic add', (t)=>t.is(conf.get('add1'), true))
-	test('merging nested objects', (t)=>t.is(conf.get('add2.add4'), 'yes'))
+	test('basic add', (t)=>t.is(conf.get('add1'), true));
+	test('merging nested objects', (t)=>t.is(conf.get('add2.add4'), 'yes'));
 	test('custom separator', (t)=>t.is(conf.get('add2:add3'), 6));
 	test('lowercase works', (t)=>t.is(conf.get('auth'), true));
 	test('can not overwrite', (t)=>t.is(conf.get('addoverwrite'), 5));
@@ -45,10 +45,10 @@ test.group('add', (test)=>{
 test.group('overrides & defaults', (test)=>{
 	test('setup', (t)=>{
 		conf
-			.add({or1 : true, def3 : { def3a : 10}})
-			.overrides({or1 : 888, or2: 999, def3: { def3c : false}})
-			.defaults({def1 : 555, def2 : 222, def3 : { def3a : 5, def3b : 6}})
-			.add({def1 : 444})
+			.add({ or1 : true, def3 : { def3a : 10 } })
+			.overrides({ or1 : 888, or2 : 999, def3 : { def3c : false } })
+			.defaults({ def1 : 555, def2 : 222, def3 : { def3a : 5, def3b : 6 } })
+			.add({ def1 : 444 });
 	});
 
 	test('defaults works', (t)=>t.is(conf.get('def2'), 222));
@@ -63,7 +63,7 @@ test.group('overrides & defaults', (test)=>{
 		t.is(conf.get('def3'), {
 			def3a : 10,
 			def3b : 6,
-			def3c : false
+			def3c : false,
 		});
 	});
 });
@@ -72,7 +72,7 @@ test.group('file', (test)=>{
 	test('setup', (t)=>conf.clear());
 	test('can require in file', (t)=>{
 		conf.file('../package.json');
-		t.is(conf.get('name'), 'pico-conf')
+		t.is(conf.get('name'), 'pico-conf');
 	});
 
 	test('can handle a non-existant config file', (t)=>{
@@ -84,18 +84,18 @@ test.group('file', (test)=>{
 	test('can handle a badly formatted config file', (t)=>{
 		t.throws(()=>{
 			conf.file('./bad_formatted.config.js');
-		})
+		});
 	});
 
-	test('env test' , (t) => {
+	test('env test', (t)=>{
 		conf.file(`./${process.env.NODE_ENV}.js`);
 		t.is(conf.get('test_env'), 'foobar');
-	})
+	});
 });
 
 
 test.group('Command line args', (test)=>{
-	test('setup', (t)=>{conf.argv({sep : ':', lowercase:true})});
+	test('setup', (t)=>{conf.argv({ sep : ':', lowercase : true });});
 
 	test('can get command line args', (t)=>t.is(conf.get('test_arg'), 5));
 	test('sep and lowercase work', (t)=>t.is(conf.get('test:arg'), 'true'));
@@ -103,7 +103,7 @@ test.group('Command line args', (test)=>{
 
 
 test.group('Environment variables', (test)=>{
-	test('setup', (t)=>{conf.env({lowercase:true})});
+	test('setup', (t)=>{conf.env({ lowercase : true });});
 
 	test('can read env vars', (t)=>t.is(conf.get('npm_package_version'), pckg.version));
 	test('lowercase works', (t)=>t.is(conf.get('node_env'), 'local'));
@@ -111,27 +111,27 @@ test.group('Environment variables', (test)=>{
 
 test.group('Methods', (test)=>{
 	test('.has()', (t)=>{
-		conf.add({has1 : 'I exist'});
+		conf.add({ has1 : 'I exist' });
 
 		t.is(conf.has('has1'), true);
 		t.is(conf.has('has47'), false);
 	});
 
 	test('arrays', (t)=>{
-		conf.add({arr1 : [1,2,3]});
+		conf.add({ arr1 : [1, 2, 3] });
 
 		t.ok(Array.isArray(conf.get('arr1')));
 		t.is(conf.get('arr1').length, 3);
-		t.is(conf.get('arr1'), [1,2,3]);
+		t.is(conf.get('arr1'), [1, 2, 3]);
 	});
 });
 
 test.group('Edge cases', (test)=>{
 
-	test('setup', (t)=>{conf.clear()});
+	test('setup', (t)=>{conf.clear();});
 	test('merges into an non-object key', (t)=>{
 		conf.add({
-			a__b : 444,
+			a__b    : 444,
 			a__b__c : 333,
 		});
 		t.not(conf.get('a:b'), 444);
@@ -141,9 +141,9 @@ test.group('Edge cases', (test)=>{
 		conf.sep('&&&');
 		conf.add({
 			custom_sep : {
-				test : 5
-			}
-		})
+				test : 5,
+			},
+		});
 		t.is(conf.get('custom_sep&&&test'), 5);
 		conf.sep();
 		t.is(conf.get('custom_sep.test'), 5);
@@ -152,26 +152,26 @@ test.group('Edge cases', (test)=>{
 		t.no(conf.get('i__do__not__exist', true));
 	});
 	test('Can get an empty object', (t)=>{
-		conf.add({ empty : {}});
+		conf.add({ empty : {} });
 		t.is(conf.get('empty'), {});
 	});
 	test('Can overwrite empty objects', (t)=>{
-		conf.defaults({empty : {a : 6}});
-		t.is(conf.get('empty.a'), 6)
-	})
+		conf.defaults({ empty : { a : 6 } });
+		t.is(conf.get('empty.a'), 6);
+	});
 });
 
 test.group('Required', (test)=>{
-	test('setup', (t)=>{conf.add({required1:'yes'})});
+	test('setup', (t)=>{conf.add({ required1 : 'yes' });});
 	test('required throws an error', (t)=>{
-		let pass
-		try{
-			conf.required(['required1', 'required2'])
-		}catch(err){ pass = true }
+		let pass;
+		try {
+			conf.required(['required1', 'required2']);
+		} catch (err){ pass = true; }
 		t.ok(pass);
 	});
 	test('required does not throw if all populated', (t)=>{
-		try{conf.required(['required1'])}catch(err){ t.fail() }
+		try {conf.required(['required1']);} catch (err){ t.fail(); }
 	});
 });
 
