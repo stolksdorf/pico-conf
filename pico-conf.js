@@ -111,7 +111,6 @@ const Config = {
 		const paths = path.split(getSeparator);
 		const result = merge(get(defaults, paths), get(configs, paths), get(overrides, paths));
 		if(notSet(result) && !allowEmpty){
-			const caller = getCaller();
 			const { filename, line } = getTrace(1);
 			throw `Config value: ${path} is missing/not set. \n${filename}:${line}`;
 		}
