@@ -132,7 +132,7 @@ Config.getClientObj = ()=>{
 		return result;
 	}, {});
 };
-Config.generateClientScript = ()=>`${Config.clientVar}=${JSON.stringify(Config.getClientObj())};`;
+Config.generateClientScript = (obj)=>`${Config.clientVar}=${JSON.stringify(obj || Config.getClientObj())};`;
 Config.loadClientScript = ()=>{
 	if(typeof global !== 'undefined' && typeof global[Config.clientVar] === 'object'){
 		Config.add(global[Config.clientVar]);
