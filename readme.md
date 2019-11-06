@@ -7,8 +7,8 @@ A tiny config manager for javascript. Inspired by [nconf](https://www.npmjs.com/
 const config = require('pico-conf')
   .argv()
   .env({lowercase:true})
-  .add(require(`./config/${process.env.NODE_ENV}.js`))
-  .defaults(require('./config/defaults.json'));
+  .add(require(`./${process.env.NODE_ENV}.js`))
+  .defaults(require('./defaults.js'));
 
 config.get('auth:token');
 ```
