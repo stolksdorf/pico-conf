@@ -7,6 +7,7 @@ const defaultOpts = {
 };
 const isObject = (item)=>(item && typeof item === 'object' && !Array.isArray(item));
 const notSet = (val)=>!val && val !== false;
+//const notSet = (val)=>typeof a !== 'undefined';
 
 const getTrace = (offset = 0)=>{
 	const stackline = (new Error()).stack.split('\n')[offset + 2];
@@ -108,6 +109,7 @@ const Config = {
 		return Config;
 	},
 	get : (path, allowEmpty = false)=>{
+		if(!path) throw `No get path provided.`;
 		const paths = path.split(getSeparator);
 		const result = merge(get(defaults, paths), get(configs, paths), get(overrides, paths));
 		if(notSet(result) && !allowEmpty){
@@ -122,6 +124,9 @@ const Config = {
 			return true;
 		} catch (err){ return false; }
 	},
+	all : ()=>{
+		return { ...overrides, ...config, ...defaults}
+	}
 };
 Config.set = Config.add;
 
