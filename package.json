@@ -1,16 +1,16 @@
 {
   "name": "pico-conf",
-  "version": "1.6.4",
+  "version": "2.0.0",
   "description": "A tiny config manager for node and browser",
   "main": "pico-conf.js",
   "scripts": {
-    "test": "pico-check tests/*.test.js test_arg=5 TEST:ARG=true",
-    "dev": "pico-check -w -b tests/*.test.js test_arg=5 TEST:ARG=true"
+    "test": "pico-check ./tests",
+    "dev": "pico-check --watch ./tests"
   },
   "author": "stolksdorf",
   "license": "ISC",
   "devDependencies": {
-    "pico-check": "^1.2.1"
+    "pico-check": "^2.0.3"
   },
   "dependencies": {}
 }
