@@ -14,20 +14,151 @@ config.get('auth:token');
 ```
 
 
+```js
+const config = require('pico-conf')
+  .add({ // Set up some basic defaults
+    some_setting : true
+    also : {
+      nesting : {
+        is : {
+          Supported : true
+        }
+      }
+    }
+  })
+  // try to load a local config with an empty fallback
+  .file('./local.config.json', {})
+  .env() //Load in environment variables
+  .argv() //And any commandline arguments last
+
+
+---
+
+config.get('some_setting'); //
+
+config.get('also__nesting.IS:supported'); // true
+
+config.get('I__dont.exist', [1,2,3,4]) // Provides fallback
+
+config.get('important__value', ()=>{
+  console.warn('⚠ You should really set this up before doing anything serious ⚠')
+  return 'foo'
+})
+
+```
+
+
+
+#### `.add(obj)`
+
+Adds the `obj` and returns a new `pico-conf` instance. Recursively loops through the object and merges it with whatever was within the existing instance. Lowercases all keys, and overwrites any value with the same path.
+
+
+#### `.file(path_to_file, [fallback = throws])`
+
+Attempts to `require()` the provided `path_to_file` and uses `.add()` to update and return a new `pico-conf` instance. Uses the caller's file location for relative file paths.
+
+If it can't the file, or they was any issue with reading the file, it will call and use the `fallback` instead. If `fallback` is a value, that will be added, if it's a function, it will be called first and it's returned value will be used. this is useful if you'd like to print helpful warning or error messages if your system was expecting a config to be loaded.
+
+`fallback` defaults to throwing an error.
+
+
+#### `.env()`
+
+
+
+#### `.sep = /:|\.|__/`
+
+The separator string used to parse heirarchy from flat config keys. Defaults to a regex that matches on `.`, `:`, or `__`. You can overwrite this to change `.get()` and `.add()`s key splitting behaviour
+
+
+
+
+
+#### `.json([...paths])`
+
+Returns a JSON object of all the stored configs in the `pico-conf` instance. If one or more `paths` is provided it will _only_ return an object made from the provided `paths`.
+
+This function is used to create safe and controlled subsets of your config that then you can send to different parts of your system. Primarily for web development, where you would only want to send a select handful of configs client-side.
+
+
+
+
+
+
+
+### Isomorphic Configs
+
+With server-side rendering
+
+```js
+{
+  client_safe : {
+    save_timeout : 500,
+    tracking_code : 'abc123'
+  },
+  user : {
+    pwd : {
+      salt : 'SECRET',
+      min_length : 6
+      max_length : 10000
+    }
+  },
+  aws : {
+    s3_bucket_key : 'ALSO_SECRET'
+  }
+}
+
+
+```
+
+
+```js
+
+window.clientsafe_configs = config.json(
+  'client_safe',
+  'user.pwd.min_length',
+  'user.pwd.max_length'
+);
+
+
+
+
+let config = require('pico-conf');
+
+if(typeof window !== 'undefined'){ //is client side
+
+  config = config.add(window.clientsafe_configs)
+
+
+}else{
+  config = config
+    .file('./defaults.js')
+    .file('./production.js')
+    .env()
+}
+
+module.exports =
+```
+
+
+
+
+
+
+
+
+
+------------------------
+
+
 *Features*
 - No dependacies
 - Under 80 lines
 - Agnostic to storage method; Just takes JS objects
 - Can be transpiled to work on the browser
-- Has overrides and default layers
-- Will consider falsey (but not `false`) values to be "not set" for purposes of overwriting and require checks.
 - Customizable separators for both getting and storing per source
-
-*Anti-features*
-- No mutation of existing configs (just overwriting)
-- Can not remove configs once added
-- Does not read in from the file system. You must provide the JS objects.
-
+- always forces lowercase tp prevent casing issues
 
 
 ## API
