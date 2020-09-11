@@ -1,6 +1,6 @@
 {
   "name": "pico-conf",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A tiny config manager for node and browser",
   "main": "pico-conf.js",
   "scripts": {

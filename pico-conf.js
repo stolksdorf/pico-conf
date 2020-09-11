@@ -14,8 +14,8 @@ const isObj   = (val)=>(!!val) && (val.constructor === Object);
 
 
 const put = (obj, arrPath, val)=>{
-	if(!isObj(obj[key])) obj[key] = {};
 	const key = arrPath.shift();
+	if(!isObj(obj[key])) obj[key] = {};
 	(arrPath.length == 0)
 		? obj[key] = val
 		: put(obj[key], arrPath, val);

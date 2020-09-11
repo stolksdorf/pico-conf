@@ -12,6 +12,9 @@ const Config = require('../pico-conf.js');
 */
 
 module.exports = {
+	env : (t)=>{
+		let conf = Config.env();
+	},
 	lowercase_keys :(t)=>{
 		let conf = Config.set({
 			ALL_CAPS : true,
