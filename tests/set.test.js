@@ -89,20 +89,4 @@ module.exports = {
 		t.ok(conf.get('a.b.f.g'))
 		t.ok(conf.get('a.c'))
 	},
-
-	new_instances : (t)=>{
-		let root = Config.set({ a : true, b : 4 });
-
-		let branch1 = root.set({ b : 5 });
-		let branch2 = root.set({ a : 6 });
-
-		t.is(root.get('a'), true);
-		t.is(root.get('b'), 4);
-
-		t.is(branch1.get('a'), true)
-		t.is(branch1.get('b'), 5)
-
-		t.is(branch2.get('a'), 6)
-		t.is(branch2.get('b'), 4)
-	}
 }
