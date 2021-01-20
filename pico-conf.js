@@ -46,12 +46,11 @@ const conf = {
 	},
 	file : (path, fallback)=>{
 		try{
-			conf.set(require(require.resolve(path, { paths : [(arguments[2].parent||arguments[2]).path] })));
+			return conf.set(require(require.resolve(path, { paths : [(arguments[2].parent||arguments[2]).path] })));
 		}catch(err){
 			if(undef(fallback)) throw `Can not find config file at: ${path}`;
-			conf.set(exe(fallback));
+			return conf.set(exe(fallback, path));
 		}
-		return conf;
 	},
 };
 module.exports = conf;
