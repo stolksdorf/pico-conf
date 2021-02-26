@@ -7,6 +7,35 @@ const set = require('./set.test.js');
 const get = require('./get.test.js');
 
 
+const file = {
+	pckg_req : (t)=>{
+		Config.file('../package.json');
+		t.is(Config.get('name'), 'pico-conf')
+	},
+	fallback : (t)=>{
+		Config.file('../packaggggge.json', {
+			name : 'fallback'
+		});
+		t.is(Config.get('name'), 'fallback');
+	},
+	not_found : (t)=>{
+		t.throws(()=>{
+			Config.file('../packaggggge.json');
+		})
+	},
+	bad_parse : (t)=>{
+		t.throws(()=>{
+			Config.file('./bad_formatted.config.js');
+		})
+	},
+	bad_parse_with_fallback : (t)=>{
+		t.throws(()=>{
+			Config.file('./bad_formatted.config.js', {name : 'fallback'});
+		})
+	}
+}
+
+
 
 
 /*
@@ -43,6 +72,7 @@ const get = require('./get.test.js');
 module.exports = {
 	//basic,
 	set,
-	get
+	get,
+	file,
 }
 

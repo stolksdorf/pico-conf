@@ -68,7 +68,7 @@ test.group('overrides & defaults', (test)=>{
 	});
 });
 
-test.group('file', (test)=>{
+test.group.only()('file', (test)=>{
 	test('setup', (t)=>conf.clear());
 	test('can require in file', (t)=>{
 		conf.file('../package.json');

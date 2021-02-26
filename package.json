@@ -1,11 +1,12 @@
 {
   "name": "pico-conf",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A tiny config manager for node and browser",
   "main": "pico-conf.js",
   "scripts": {
     "test": "pico-check ./tests",
-    "dev": "pico-check --watch ./tests"
+    "dev": "pico-check --watch ./tests",
+    "test:dev": "pico-check --watch ./tests"
   },
   "author": "stolksdorf",
   "license": "ISC",

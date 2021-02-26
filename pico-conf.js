@@ -13,7 +13,7 @@ const conf = {
 	get : (path, fallback)=>{
 		return path.toLowerCase().split(sep).reduce((acc, part)=>{
 			if(!undef(acc[part])) return acc[part];
-			if(undef(fallback)) throw `No config var set at: ${path}`;
+			if(undef(fallback)) throw new Error(`No config var set at: ${path}`);
 			return exe(fallback, path);
 		}, conf.cache);
 	},
@@ -48,8 +48,9 @@ const conf = {
 		try{
 			return conf.set(require(require.resolve(path, { paths : [(arguments[2].parent||arguments[2]).path] })));
 		}catch(err){
-			if(undef(fallback)) throw `Can not find config file at: ${path}`;
-			return conf.set(exe(fallback, path));
+			const notFoundErr = err.toString().startsWith('Error: Cannot find module');
+			if(notFoundErr && !undef(fallback)) return conf.set(exe(fallback, path));
+			throw err
 		}
 	},
 };
