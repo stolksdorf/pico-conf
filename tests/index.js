@@ -33,6 +33,29 @@ const file = {
 			Config.file('./bad_formatted.config.js', {name : 'fallback'});
 		})
 	}
+};
+
+const extras = {
+	setting_undef_does_not_overwrite : (t)=>{
+		Config.set({
+			a : 4,
+			b : 8,
+			c : {
+				foo : true,
+				bar : false
+			}
+		});
+
+		Config.set({
+			a : 7,
+			b : undefined,
+			c : undefined
+		});
+
+		t.is(Config.get('a'), 7);
+		t.is(Config.get('b'), 8);
+		t.is(Config.get('c:foo'), true);
+	}
 }
 
 
@@ -74,5 +97,6 @@ module.exports = {
 	set,
 	get,
 	file,
+	extras,
 }
 

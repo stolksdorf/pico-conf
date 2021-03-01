@@ -3,6 +3,7 @@ const isObj = (obj)=>!!obj && (typeof obj == 'object' && obj.constructor == Obje
 const undef = (obj)=>typeof obj === 'undefined';
 const exe = (obj, ...args)=>typeof obj=='function'?obj(...args):obj;
 const put = (obj, arrPath, val)=>{
+	if(undef(val)) return obj;
 	const key = arrPath.shift();
 	if(!isObj(obj[key])) obj[key] = {};
 	(arrPath.length == 0) ? obj[key] = val : put(obj[key], arrPath, val);
@@ -21,9 +22,11 @@ const conf = {
 		const merge = (base, obj)=>{
 			Object.entries(obj).map(([key, val])=>{
 				key = key.toLowerCase();
-				if(!isObj(base[key])) base[key] = {};
-				if(isObj(val)) return merge(base[key], val);
-				base[key] = val;
+				if(isObj(val)){
+					if(!isObj(base[key])) base[key] = {};
+					return merge(base[key], val);
+				}
+				if(!undef(val)) base[key] = val;
 			});
 			return base;
 		};
