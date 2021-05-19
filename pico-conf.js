@@ -19,6 +19,7 @@ const conf = {
 		}, conf.cache);
 	},
 	set : (obj)=>{
+		if(!isObj(obj)) return conf;
 		const merge = (base, obj)=>{
 			Object.entries(obj).map(([key, val])=>{
 				key = key.toLowerCase();
